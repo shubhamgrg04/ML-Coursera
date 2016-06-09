@@ -61,12 +61,36 @@ Theta2_grad = zeros(size(Theta2));
 %               the regularization separately and then add them to Theta1_grad
 %               and Theta2_grad from Part 2.
 %
+X = [ones(size(X,1),1) X];
+hidden = sigmoid(X*Theta1');
+hidden = [ones(size(hidden,1),1) hidden];
+h = sigmoid(hidden*Theta2');
+y_modified = zeros(size(h));
+for i = 1:size(X,1)
+    y_modified(i,y(i)) = 1 ;
+end
 
+cost1 = zeros(size(X,1), 1);
+cost2 = zeros(size(X,1), 1);
 
+for i = 1:size(X,1)
+    cost1(i) = y_modified(i,:) * log(h(i, :)');
+end
 
+for i = 1:size(X,1)
+    cost2(i) = (1 - y_modified(i,:)) * log(1 - h(i, :)');
+end
 
+regularization_cost = sumsqr(Theta1(:,2:end)) + sumsqr(Theta2(:,2:end));
 
+J = -sum(cost1 + cost2)/m + lambda*regularization_cost/(2*m);
+    
+%   Cost Finished/ Gradient Calculations Below
 
+delta3 =  h - y_modified;
+delta2 = (delta3 .* sigmoidGradient(hidden*Theta2')) * Theta2;
+Theta1_grad = (delta2(:,2:end)' * X) / m;
+Theta2_grad = (delta3'*hidden) / m;
 
 
 

@@ -61,7 +61,7 @@ pause;
 %  regression.
 %
 
-theta = [1 ; 1];
+theta = ones(size(X,2)+1, 1);
 [J, grad] = linearRegCostFunction([ones(m, 1) X], y, theta, 1);
 
 fprintf(['Gradient at theta = [1 ; 1]:  [%f; %f] '...
@@ -164,7 +164,7 @@ pause;
 %  lambda to see how the fit and learning curve change.
 %
 
-lambda = 0;
+lambda = 3;
 [theta] = trainLinearReg(X_poly, y, lambda);
 
 % Plot training data and fit
@@ -209,6 +209,7 @@ plot(lambda_vec, error_train, lambda_vec, error_val);
 legend('Train', 'Cross Validation');
 xlabel('lambda');
 ylabel('Error');
+axis([0 10 0 20]);
 
 fprintf('lambda\t\tTrain Error\tValidation Error\n');
 for i = 1:length(lambda_vec)
